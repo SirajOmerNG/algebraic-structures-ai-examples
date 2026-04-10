@@ -3,596 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algebraic Structures in AI - Complete Results</title>
+    <title>Interactive Algebraic Structures Demo</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, monospace;
-            line-height: 1.6;
-            color: #24292e;
-            background: #f6f8fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
+        }
+        .demo-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-        }
-        .content {
-            padding: 40px;
-        }
-        .example {
-            background: #f8f9fa;
-            border-left: 5px solid #667eea;
-            margin-bottom: 40px;
+            border-radius: 16px;
             padding: 25px;
-            border-radius: 8px;
-            transition: transform 0.2s;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
-        .example:hover {
-            transform: translateX(5px);
-        }
-        .example h2 {
+        .demo-card h2 {
             color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
         }
-        .example h3 {
-            color: #586069;
-            margin: 20px 0 10px;
-            font-size: 1.1rem;
-        }
-        .step {
-            background: #e9ecef;
-            padding: 10px 15px;
-            border-radius: 6px;
+        .input-group {
             margin: 15px 0;
-            font-weight: bold;
-            color: #495057;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
         }
-        .output {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
+        .input-group label {
+            font-weight: bold;
+            min-width: 120px;
+        }
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 8px;
             font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
+            margin-top: 15px;
             overflow-x: auto;
-            margin: 15px 0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
         }
         .matrix {
             font-family: 'Courier New', monospace;
-            background: #1a202c;
+            background: #2d3748;
+            color: #e2e8f0;
             padding: 15px;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-        .badge {
+            border-radius: 8px;
             display: inline-block;
-            background: #28a745;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            margin-right: 10px;
         }
-        .badge-blue {
-            background: #0366d6;
-        }
-        .badge-purple {
-            background: #764ba2;
-        }
-        .formula {
-            font-family: 'Courier New', monospace;
-            background: #e9ecef;
-            padding: 12px;
-            border-radius: 6px;
-            margin: 10px 0;
-            font-size: 0.9rem;
-            overflow-x: auto;
-        }
-        .check {
-            color: #28a745;
-            font-weight: bold;
-        }
-        .summary-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-        }
-        .summary-table th, .summary-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        .summary-table th {
-            background: #667eea;
-            color: white;
-        }
-        .btn {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            margin: 10px 5px;
-            transition: background 0.2s;
-        }
-        .btn:hover {
-            background: #5a67d8;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
-        }
-        .footer {
-            background: #24292e;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            font-size: 0.9rem;
-        }
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        hr {
-            margin: 30px 0;
-            border: none;
-            border-top: 1px solid #e1e4e8;
-        }
-        .ascii-box {
-            font-family: 'Courier New', monospace;
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 6px;
-            white-space: pre;
-            overflow-x: auto;
-            font-size: 0.8rem;
-        }
-        @media (max-width: 768px) {
-            .content { padding: 20px; }
-            .header h1 { font-size: 1.8rem; }
-            .output { font-size: 0.7rem; }
-        }
+        .success { color: #28a745; font-weight: bold; }
+        .error { color: #dc3545; font-weight: bold; }
+        hr { margin: 20px 0; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🧮 Algebraic Structures in Modern AI</h1>
-            <p>Five Complete Worked Examples with Full Output Results</p>
-            <p style="font-size: 0.9rem; margin-top: 15px;">Based on: "Algebraic Foundations of Modern Artificial Intelligence"</p>
-            <p style="font-size: 0.85rem;">Siraj Osman Omer | 2026</p>
+        <h1 style="color: white; text-align: center;">🧮 Interactive Algebraic Structures Demo</h1>
+        <p style="color: white; text-align: center; margin-bottom: 30px;">Change any input - see results update in real-time!</p>
+
+        <!-- Example 1: SO(2) Equivariance -->
+        <div class="demo-card">
+            <h2>1️⃣ SO(2) Equivariance (G-Modules)</h2>
+            <div class="input-group">
+                <label>Rotation Angle θ:</label>
+                <input type="range" id="theta" min="0" max="360" value="45" step="5">
+                <span id="theta_val">45°</span>
+            </div>
+            <div class="input-group">
+                <label>Layer Angle α:</label>
+                <input type="range" id="alpha" min="0" max="360" value="30" step="5">
+                <span id="alpha_val">30°</span>
+            </div>
+            <div class="input-group">
+                <label>Input Vector x:</label>
+                <input type="number" id="x1" value="1" step="0.1" style="width: 80px;"> , 
+                <input type="number" id="x2" value="0" step="0.1" style="width: 80px;">
+            </div>
+            <button onclick="runEquivariance()">Test Equivariance</button>
+            <div id="result1" class="result">Click "Test Equivariance" to see results...</div>
         </div>
-        
-        <div class="content">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <a href="algebraic_structures_ai_examples.py" class="btn">🐍 Download Python Script</a>
-                <a href="https://github.com/SirajOmerNG/algebraic-structures-ai-examples" class="btn btn-outline">⭐ GitHub Repository</a>
+
+        <!-- Example 2: Tensor Products -->
+        <div class="demo-card">
+            <h2>2️⃣ Tensor Products (Attention Mechanism)</h2>
+            <div class="input-group">
+                <label>Query Dimension:</label>
+                <input type="number" id="dimV" value="3" min="1" max="5" style="width: 70px;">
             </div>
-
-            <!-- ================================================================ -->
-            <!-- EXAMPLE 1: SO(2) Equivariance -->
-            <!-- ================================================================ -->
-            <div class="example">
-                <h2>1️⃣ G-Modules: SO(2) Rotational Equivariance</h2>
-                <p><span class="badge">Paper Section 7.1</span> <span class="badge badge-blue">Algebraic Concept: Group Representations</span></p>
-                
-                <div class="step">📐 Step 1: Build rotation matrix R(θ) for θ = 45°</div>
-                <div class="output">
-θ = π/4 = 45°
-
-R(45°) = 
-[[ 0.7071 -0.7071]
- [ 0.7071  0.7071]]
-
-This matrix rotates any 2D point by 45° counter-clockwise.
-                </div>
-
-                <div class="step">⚙️ Step 2: Choose layer φ(x) = R(α)·x where α = 30°</div>
-                <div class="output">
-Layer weight matrix W = R(30°) = 
-[[ 0.8660 -0.5000]
- [ 0.5000  0.8660]]
-
-The paper proves: rotations commute with rotations (SO(2) is abelian).
-So W·R(θ) = R(θ)·W — this layer IS equivariant.
-                </div>
-
-                <div class="step">🔬 Step 3: Test with point x = [1, 0] (point on positive x-axis)</div>
-                <div class="output">
-x = [1. 0.]   (a point at angle 0°, distance 1 from origin)
-
-PATH A — 'Rotate input FIRST, then layer':
-  R(45°)·x       = [0.7071 0.7071]   ← rotated 45°
-  W · (R(45°)·x) = [0.2588 0.9659]   ← layer applied after
-
-PATH B — 'Apply layer FIRST, then rotate output':
-  W·x            = [0.8660 0.5000]   ← layer applied first
-  R(45°)·(W·x)   = [0.2588 0.9659]   ← then rotated 45°
-
-‖Path A − Path B‖ = 0.00000000
-
-<span class="check">✓ EQUIVARIANCE CONFIRMED: Both paths give identical results!</span>
-<span class="check">✓ Conclusion: R(30°) is a valid equivariant layer for SO(2).</span>
-                </div>
-                <p><strong>📊 AI Impact:</strong> 12× data efficiency for symmetric data (rotated MNIST)</p>
+            <div class="input-group">
+                <label>Key Dimension:</label>
+                <input type="number" id="dimW" value="2" min="1" max="5" style="width: 70px;">
             </div>
-
-            <!-- ================================================================ -->
-            <!-- EXAMPLE 2: Tensor Products -->
-            <!-- ================================================================ -->
-            <div class="example">
-                <h2>2️⃣ Tensor Products: The Math Behind Attention</h2>
-                <p><span class="badge">Paper Section 7.2</span> <span class="badge badge-blue">Algebraic Concept: Tensor Product V ⊗ W</span></p>
-                
-                <div class="step">📐 Step 1: Define the two vector spaces V (queries) and W (keys)</div>
-                <div class="output">
-V = R³  (query space, e.g. each query is a 3D vector)
-W = R²  (key space, e.g. each key is a 2D vector)
-
-Basis of V: ['e1', 'e2', 'e3']
-Basis of W: ['f1', 'f2']
-                </div>
-
-                <div class="step">📐 Step 2: Compute dimension of tensor product V ⊗ W</div>
-                <div class="output">
-Formula: dim(V ⊗ W) = dim(V) × dim(W) = 3 × 2 = 6
-
-This means attention has 6 independent interaction dimensions.
-                </div>
-
-                <div class="step">📐 Step 3: Write out ALL basis elements of V ⊗ W</div>
-                <div class="output">
-Every basis element e_i ⊗ f_j captures one specific interaction:
-    e1⊗f1  ← query dim 1 interacts with key dim 1
-    e1⊗f2  ← query dim 1 interacts with key dim 2
-    e2⊗f1  ← query dim 2 interacts with key dim 1
-    e2⊗f2  ← query dim 2 interacts with key dim 2
-    e3⊗f1  ← query dim 3 interacts with key dim 1
-    e3⊗f2  ← query dim 3 interacts with key dim 2
-
-Total basis elements: 6 ✓ (matches dim = 6)
-                </div>
-
-                <div class="step">📐 Step 4: Show concrete query/key pair as tensor product</div>
-                <div class="output">
-Example query vector v = [ 2. -1.  3.]
-Example key    vector w = [1. 4.]
-
-v ⊗ w (as matrix, rows=query dims, cols=key dims):
-
-[[ 2.  8.]
- [-1. -4.]
- [ 3. 12.]]
-
-Reading across rows: v⊗w = (2.0)·e1⊗f1 + (8.0)·e1⊗f2 + (-1.0)·e2⊗f1 + (-4.0)·e2⊗f2 + (3.0)·e3⊗f1 + (12.0)·e3⊗f2
-
-In attention: Q·Kᵀ computes this for ALL query-key pairs simultaneously.
-The softmax then picks which interactions matter most.
-                </div>
-                <p><strong>📊 AI Impact:</strong> Explains multi-head attention's expressive power (4.1 BLEU score gain)</p>
+            <div class="input-group">
+                <label>Query Vector v:</label>
+                <input type="text" id="v" value="2, -1, 3" style="width: 200px;">
             </div>
-
-            <!-- ================================================================ -->
-            <!-- EXAMPLE 3: Functors -->
-            <!-- ================================================================ -->
-            <div class="example">
-                <h2>3️⃣ Functors: Neural Networks as Categorical Functors</h2>
-                <p><span class="badge">Paper Section 7.3</span> <span class="badge badge-blue">Algebraic Concept: Category Theory & Functors</span></p>
-                
-                <div class="step">📐 Step 1: Define simple 1-layer networks</div>
-                <div class="output">
-Input x = [ 1.  -0.5]  (dimension 2)
-
-Layer f: R² → R³  (maps 2D to 3D)
-Layer g: R³ → R²  (maps 3D to 2D)
-                </div>
-
-                <div class="step">📐 Step 2: Functor Axiom 1 — Identity preservation: F(id) = id</div>
-                <div class="output">
-Test: identity applied to x = [ 3. -1.]
-Result = [ 3. -1.]
-Same as input? True
-
-<span class="check">✓ F(id_V)(x) = x = id_{F(V)}(x) — Axiom 1 holds.</span>
-                </div>
-
-                <div class="step">📐 Step 3: Functor Axiom 2 — Composition preservation: F(g∘f) = F(g)∘F(f)</div>
-                <div class="output">
-Input x = [ 1.  -0.5]
-
-METHOD A — Compose into single function (g∘f), then apply:
-    (g∘f)(x) = [0.45  0.325]
-
-METHOD B — Apply f, then apply g to the result:
-    f(x)     = [0.75 0.   0.  ]   ← hidden representation
-    g(f(x))  = [0.45  0.325]   ← final output
-
-‖Method A − Method B‖ = 0.0000000000
-
-<span class="check">✓ Identical results — Axiom 2 holds: F(g∘f) = F(g)∘F(f)</span>
-
-IMPLICATION: You can safely split a network at any layer, process
-pieces separately, and recombine — the math guarantees consistency.
-                </div>
-                <p><strong>📊 AI Impact:</strong> Enables modular network design and compositional generalization</p>
+            <div class="input-group">
+                <label>Key Vector w:</label>
+                <input type="text" id="w" value="1, 4" style="width: 200px;">
             </div>
-
-            <!-- ================================================================ -->
-            <!-- EXAMPLE 4: Homology / Betti Numbers -->
-            <!-- ================================================================ -->
-            <div class="example">
-                <h2>4️⃣ Homology: Betti Numbers — Counting Topology of Shapes</h2>
-                <p><span class="badge">Paper Section 7.4</span> <span class="badge badge-blue">Algebraic Concept: Homological Algebra</span></p>
-                
-                <div class="step">📐 Step 1: Build the triangle complex</div>
-                <div class="output">
-Vertices: ['v0', 'v1', 'v2']  (3 total)
-Edges:    ['e(0,1)', 'e(1,2)', 'e(0,2)']  (3 total)
-Triangles: []  (0 total) ← NO filled interior!
-
-Shape looks like:   v0 ─── v1
-                      ╲     ╱
-                        v2
-Just the outline — a triangular RING, not a solid triangle.
-                </div>
-
-                <div class="step">📐 Step 2: Build the boundary matrix ∂₁ (edges → vertices)</div>
-                <div class="output">
-∂₁ maps each EDGE to its two ENDPOINTS (with signs for orientation):
-  ∂₁(e_ij) = v_j - v_i    (tail gets -1, head gets +1)
-
-Columns = edges, Rows = vertices:
-     e(0,1)  e(1,2)  e(0,2)
-v0 [  -1      0      -1   ]
-v1 [  +1     -1       0   ]
-v2 [   0     +1      +1   ]
-
-∂₁ matrix =
-[[-1  0 -1]
- [ 1 -1  0]
- [ 0  1  1]]
-                </div>
-
-                <div class="step">📐 Step 3: Compute ranks and Betti numbers</div>
-                <div class="output">
-rank(∂₁) = 2  (how many linearly independent boundary relations)
-rank(∂₂) = 0  (no filled triangles → no 2D boundaries)
-
-β₀ (components) = 3 vertices − rank(∂₁) = 3 − 2 = 1
-β₁ (holes)      = dim(ker ∂₁) − dim(im ∂₂)
-                = (3 − 2) − 0
-                = 1 − 0 = 1
-
-<span class="check">✓ RESULTS:</span>
-    β₀ = 1 → The triangle is ONE connected shape (no separate pieces)
-    β₁ = 1 → The triangle has ONE hole/loop inside it
-
-If we FILLED the interior (added the triangle face), β₁ would become 0
-because the hole would be "plugged."
-
-IN AI: Persistent homology uses these numbers to describe point cloud shape.
-A ring of data points has β₁=1 (one loop). Useful for detecting circular
-patterns in molecular data, brain connectivity, etc.
-                </div>
-                <p><strong>📊 AI Impact:</strong> Robust topological feature extraction under 10% noise</p>
-            </div>
-
-            <!-- ================================================================ -->
-            <!-- EXAMPLE 5: XOR Polynomial Solution -->
-            <!-- ================================================================ -->
-            <div class="example">
-                <h2>5️⃣ Algebraic Varieties: XOR with Polynomial Network</h2>
-                <p><span class="badge">Paper Section 7.5</span> <span class="badge badge-blue">Algebraic Concept: Algebraic Geometry / Varieties</span></p>
-                
-                <div class="step">📐 Step 1: Write equations from XOR truth table</div>
-                <div class="output">
-XOR truth table:
-  x1=0, x2=0 → output 0
-  x1=0, x2=1 → output 1
-  x1=1, x2=0 → output 1
-  x1=1, x2=1 → output 0
-
-Polynomial ansatz:
-  f(x1, x2) = w0 + w1·x1 + w2·x2 + w3·x1² + w4·x2² + w5·x1·x2
-
-Plug each (x1, x2, target) into f:
-  f(0,0) = w0                                        = 0   ...(eq. 1)
-  f(0,1) = w0 + w2 + w4                              = 1   ...(eq. 2)
-  f(1,0) = w0 + w1 + w3                              = 1   ...(eq. 3)
-  f(1,1) = w0 + w1 + w2 + w3 + w4 + w5              = 0   ...(eq. 4)
-                </div>
-
-                <div class="step">📐 Step 2: Solve the system algebraically</div>
-                <div class="output">
-From eq. 1:  w0 = 0
-
-Substitute into eq. 2:  w2 + w4 = 1
-Substitute into eq. 3:  w1 + w3 = 1
-
-From eq. 4 with w0=0:  w1 + w2 + w3 + w4 + w5 = 0
-                       (w1 + w3) + (w2 + w4) + w5 = 0
-                            1      +     1     + w5 = 0
-                       → w5 = -2
-
-The paper picks the SIMPLEST/CANONICAL solution:
-  w0=0, w1=1, w2=1, w3=0, w4=0, w5=-2
-
-<span class="check">→ f(x1, x2) = x1 + x2 − 2·x1·x2</span>
-                </div>
-
-                <div class="step">📐 Step 3: Verify the solution on all XOR inputs</div>
-                <div class="output">
-Weights: w = [0. 1. 1. 0. 0. -2.]
-Formula: f(x1,x2) = 1·x1 + 1·x2 + (-2)·x1·x2
-
-  x1    x2    Target      f(x1,x2)    Correct?
-──────────────────────────────────────────────────
-   0     0         0           0.0           ✓
-   0     1         1           1.0           ✓
-   1     0         1           1.0           ✓
-   1     1         0           0.0           ✓
-
-<span class="check">All correct? True</span>
-                </div>
-
-                <div class="step">📐 Step 4: Decision boundary as algebraic variety</div>
-                <div class="output">
-The DECISION BOUNDARY is where f(x1, x2) = 0:
-  x1 + x2 − 2·x1·x2 = 0
-
-This is an ALGEBRAIC VARIETY — the set of all points satisfying this equation.
-It's a degree-2 curve (a hyperbola!) that perfectly separates the XOR classes.
-
-In algebraic geometry terms:
-  • Polynomial ring: R[x1, x2]
-  • Ideal: I = ⟨x1 + x2 − 2·x1·x2⟩
-  • Variety: V(I) = {(x1,x2) : x1 + x2 − 2·x1·x2 = 0}
-
-The Nullstellensatz (paper Theorem 2.10) connects this geometric curve
-to its algebraic definition — proving the two descriptions are equivalent.
-                </div>
-
-                <div class="step">📐 Step 5: Variety passes through XOR boundary points</div>
-                <div class="output">
-Points ON the boundary (f=0) — between classes:
-  f(0.00, -0.00) = 0.000000 ≈ 0  ← ON the boundary
-  f(1.00, 1.00) = 0.000000 ≈ 0  ← ON the boundary
-
-<span class="check">✓ SUMMARY:</span>
-  • XOR is NOT linearly separable (no straight-line solution)
-  • A degree-2 polynomial solves it EXACTLY
-  • Found by algebra (not gradient descent) — perfect, zero error
-  • Decision boundary is a hyperbola: an algebraic variety in R²
-                </div>
-                <p><strong>📊 AI Impact:</strong> Exact algebraic solutions via Gröbner basis (instant vs 50 epochs)</p>
-            </div>
-
-            <!-- ================================================================ -->
-            <!-- SUMMARY TABLE -->
-            <!-- ================================================================ -->
-            <hr>
-            
-            <h2 style="text-align: center; color: #667eea;">📊 SUMMARY: Five Algebraic Structures and Their AI Roles</h2>
-            
-            <table class="summary-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Algebraic Concept</th>
-                        <th>AI Application (What it buys you)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><strong>G-Modules (Groups)</strong></td>
-                        <td>Equivariant networks — rotate input = rotate output. <strong>12× data efficiency</strong></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><strong>Tensor Products</strong></td>
-                        <td>Attention = bilinear map between Q and K. Multi-head = decompose tensor space. <strong>4.1 BLEU gain</strong></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><strong>Functors (Categories)</strong></td>
-                        <td>Nets are functors: composition law holds. Backprop is a contravariant functor</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td><strong>Homology (β₀, β₁, ...)</strong></td>
-                        <td>Count connected pieces and holes in data. <strong>Robust to 10% noise</strong></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td><strong>Algebraic Varieties</strong></td>
-                        <td>Decision boundaries are polynomial curves. <strong>Gröbner basis → exact weights</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="ascii-box">
-┌───┬──────────────────────────┬──────────────────────────────────────────┐
-│ # │ Algebraic Concept        │ AI Application (What it buys you)        │
-├───┼──────────────────────────┼──────────────────────────────────────────┤
-│ 1 │ G-Modules (Groups)       │ Equivariant networks — rotate input =    │
-│   │                          │ rotate output. 12× data efficiency.      │
-├───┼──────────────────────────┼──────────────────────────────────────────┤
-│ 2 │ Tensor Products          │ Attention = bilinear map between Q and K.│
-│   │                          │ Multi-head = decompose the tensor space. │
-├───┼──────────────────────────┼──────────────────────────────────────────┤
-│ 3 │ Functors (Categories)    │ Nets are functors: composition law holds.│
-│   │                          │ Backprop is a contravariant functor.     │
-├───┼──────────────────────────┼──────────────────────────────────────────┤
-│ 4 │ Homology (β₀, β₁, ...)  │ Count connected pieces and holes in data.│
-│   │                          │ Robust to noise — topology > geometry.   │
-├───┼──────────────────────────┼──────────────────────────────────────────┤
-│ 5 │ Algebraic Varieties      │ Decision boundaries are polynomial curves│
-│   │                          │ Gröbner basis → exact network weights.   │
-└───┴──────────────────────────┴──────────────────────────────────────────┘
-
-<span class="check">Each example shows that core AI capabilities are not engineering tricks —</span>
-<span class="check">they are consequences of deep algebraic structure.</span>
-            </div>
-
-            <hr>
-
-            <div style="text-align: center;">
-                <h3>📚 Paper Citation</h3>
-                <div class="formula">
-@article{omer2026algebraic,<br>
-&nbsp;&nbsp;title={Algebraic Foundations of Modern Artificial Intelligence: A Unified Mathematical Framework},<br>
-&nbsp;&nbsp;author={Omer, Siraj Osman},<br>
-&nbsp;&nbsp;journal={arXiv preprint},<br>
-&nbsp;&nbsp;year={2026}<br>
-}
-                </div>
-            </div>
+            <button onclick="runTensor()">Compute Tensor Product</button>
+            <div id="result2" class="result">Click "Compute Tensor Product" to see results...</div>
         </div>
-        
-        <div class="footer">
-            <p>📄 For the full paper code with datasets (MNIST, CIFAR-10, Agriculture, Spherical, Rotated MNIST):</p>
-            <p><a href="https://github.com/SirajOmerNG/homological-algebra-framework">github.com/SirajOmerNG/homological-algebra-framework</a></p>
-            <p style="margin-top: 20px;">© 2026 Siraj Osman Omer | MIT License</p>
-            <p style="margin-top: 10px; font-size: 0.8rem;">✅ ALL FIVE EXAMPLES COMPLETE — Results verified and displayed above</p>
+
+        <!-- Example 4: Betti Numbers -->
+        <div class="demo-card">
+            <h2>4️⃣ Betti Numbers (Homology)</h2>
+            <div class="input-group">
+                <label>Shape:</label>
+                <select id="shape" onchange="updateShape()">
+                    <option value="triangle">Triangle (3 vertices, 3 edges)</option>
+                    <option value="square">Square (4 vertices, 4 edges)</option>
+                    <option value="filled_triangle">Filled Triangle (3 vertices, 3 edges, 1 face)</option>
+                    <option value="circle">Circle (8 vertices, 8 edges)</option>
+                </select>
+            </div>
+            <button onclick="runHomology()">Compute Betti Numbers</button>
+            <div id="result4" class="result">Click "Compute Betti Numbers" to see results...</div>
+        </div>
+
+        <!-- Example 5: XOR Polynomial -->
+        <div class="demo-card">
+            <h2>5️⃣ XOR Polynomial (Algebraic Varieties)</h2>
+            <div class="input-group">
+                <label>Custom Weights:</label>
+                <button onclick="resetWeights()">Reset to XOR Solution</button>
+            </div>
+            <div class="input-group">
+                <label>w₀:</label> <input type="number" id="w0" value="0" step="0.5" style="width: 70px;">
+                <label>w₁:</label> <input type="number" id="w1" value="1" step="0.5" style="width: 70px;">
+                <label>w₂:</label> <input type="number" id="w2" value="1" step="0.5" style="width: 70px;">
+                <label>w₃:</label> <input type="number" id="w3" value="0" step="0.5" style="width: 70px;">
+                <label>w₄:</label> <input type="number" id="w4" value="0" step="0.5" style="width: 70px;">
+                <label>w₅:</label> <input type="number" id="w5" value="-2" step="0.5" style="width: 70px;">
+            </div>
+            <div class="input-group">
+                <label>Test Point (x₁, x₂):</label>
+                <input type="number" id="test_x1" value="0.5" step="0.1" style="width: 80px;"> , 
+                <input type="number" id="test_x2" value="0.5" step="0.1" style="width: 80px;">
+                <button onclick="testPoint()">Test Point</button>
+            </div>
+            <div id="result5" class="result">Click "Test Point" or modify weights to see results...</div>
         </div>
     </div>
+
+    <script>
+        // Helper: matrix multiplication
+        function matMul(A, B) {
+            if (typeof B[0] === 'number') {
+                // Vector multiplication
+                return [A[0][0]*B[0] + A[0][1]*B[1], A[1][0]*B[0] + A[1][1]*B[1]];
+            }
+            return A.map(row => B[0].map((_, j) => row.reduce((sum, _, k) => sum + row[k] * B[k][j], 0)));
+        }
+
+        // Example 1: SO(2) Equivariance
+        function runEquivariance() {
+            const theta = parseFloat(document.getElementById('theta').value) * Math.PI / 180;
+            const alpha = parseFloat(document.getElementById('alpha').value) * Math.PI / 180;
+            const x1 = parseFloat(document.getElementById('x1').value);
+            const x2 = parseFloat(document.getElementById('x2').value);
+            
+            const R = [[Math.cos(theta), -Math.sin(theta)], [Math.sin(theta), Math.cos(theta)]];
+            const W = [[Math.cos(alpha), -Math.sin(alpha)], [Math.sin(alpha), Math.cos(alpha)]];
+            const x = [x1, x2];
+            
+            const pathA = matMul(W, matMul(R, x));
+            const pathB = matMul(R, matMul(W, x));
+            
+            const error = Math.hypot(pathA[0] - pathB[0], pathA[1] - pathB[1]);
+            
+            document.getElementById('result1').innerHTML = `
+                <strong>R(${document.getElementById('theta').value}°):</strong><br>
+                [${R[0][0].toFixed(4)}, ${R[0][1].toFixed(4)}]<br>
+                [${R[1][0].toFixed(4)}, ${R[1][1].toFixed(4)}]<br><br>
+                <strong>W(${document.getElementById('alpha').value}°):</strong><br>
+                [${W[0][0].toFixed(4)}, ${W[0][1].toFixed(4)}]<br>
+                [${W[1][0].toFixed(4)}, ${W[1][1].toFixed(4)}]<br><br>
+                <strong>Input x:</strong> [${x1}, ${x2}]<br>
+                <strong>PATH A (rotate then layer):</strong> [${pathA[0].toFixed(4)}, ${pathA[1].toFixed(4)}]<br>
+                <strong>PATH B (layer then rotate):</strong> [${pathB[0].toFixed(4)}, ${pathB[1].toFixed(4)}]<br>
+                <strong>‖Path A − Path B‖ = ${error.toFixed(8)}</strong><br>
+                ${error < 1e-10 ? '<span class="success">✓ EQUIVARIANCE CONFIRMED!</span>' : '<span class="error">✗ NOT equivariant</span>'}
+            `;
+        }
+
+        // Example 2: Tensor Products
+        function runTensor() {
+            const dimV = parseInt(document.getElementById('dimV').value);
+            const dimW = parseInt(document.getElementById('dimW').value);
+            let v = document.getElementById('v').value.split(',').map(Number);
+            let w = document.getElementById('w').value.split(',').map(Number);
+            
+            if (v.length !== dimV) {
+                document.getElementById('result2').innerHTML = `<span class="error">Error: Query vector must have ${dimV} dimensions!</span>`;
+                return;
+            }
+            if (w.length !== dimW) {
+                document.getElementById('result2').innerHTML = `<span class="error">Error: Key vector must have ${dimW} dimensions!</span>`;
+                return;
+            }
+            
+            const outer = Array(dimV).fill().map(() => Array(dimW).fill(0));
+            for (let i = 0; i < dimV; i++) {
+                for (let j = 0; j < dimW; j++) {
+                    outer[i][j] = v[i] * w[j];
+                }
+            }
+            
+            let basisHtml = '';
+            for (let i = 0; i < dimV; i++) {
+                for (let j = 0; j < dimW; j++) {
+                    if (Math.abs(outer[i][j]) > 1e-10) {
+                        basisHtml += `(${outer[i][j].toFixed(2)})·e${i+1}⊗f${j+1} + `;
+                    }
+                }
+            }
+            basisHtml = basisHtml.slice(0, -3) || '0';
+            
+            document.getElementById('result2').innerHTML = `
+                <strong>dim(V ⊗ W) = ${dimV} × ${dimW} = ${dimV * dimW}</strong><br><br>
+                <strong>v ⊗ w (as matrix):</strong><br>
+                ${outer.map(row => '[' + row.map(x => x.toFixed(2)).join(', ') + ']').join('<br>')}<br><br>
+                <strong>Decomposition:</strong> ${basisHtml}
+            `;
+        }
+
+        // Example 4: Betti Numbers
+        const shapes = {
+            triangle: { vertices: 3, edges: 3, faces: 0, name: "Triangle (outline)" },
+            square: { vertices: 4, edges: 4, faces: 0, name: "Square (outline)" },
+            filled_triangle: { vertices: 3, edges: 3, faces: 1, name: "Filled Triangle" },
+            circle: { vertices: 8, edges: 8, faces: 0, name: "Circle (8 vertices)" }
+        };
+        
+        function updateShape() {
+            const shape = document.getElementById('shape').value;
+            const data = shapes[shape];
+            document.getElementById('result4').innerHTML = `Selected: ${data.name}<br>Vertices: ${data.vertices}, Edges: ${data.edges}, Faces: ${data.faces}<br>Click "Compute Betti Numbers" to calculate.`;
+        }
+        
+        function runHomology() {
+            const shape = document.getElementById('shape').value;
+            const data = shapes[shape];
+            
+            // Simplified Betti calculation
+            const beta0 = data.faces > 0 ? 1 : (data.vertices - (data.edges - 1));
+            const beta1 = data.faces > 0 ? 0 : (data.edges - data.vertices + 1);
+            
+            document.getElementById('result4').innerHTML = `
+                <strong>Shape:</strong> ${data.name}<br>
+                <strong>Vertices (V):</strong> ${data.vertices}<br>
+                <strong>Edges (E):</strong> ${data.edges}<br>
+                <strong>Faces (F):</strong> ${data.faces}<br><br>
+                <strong>β₀ (connected components):</strong> ${beta0}<br>
+                <strong>β₁ (holes/loops):</strong> ${beta1}<br><br>
+                ${beta1 === 1 ? '<span class="success">✓ This shape has ONE hole/loop!</span>' : beta1 === 0 ? '<span>This shape has no holes (simply connected).</span>' : `<span>This shape has ${beta1} holes.</span>`}
+            `;
+        }
+
+        // Example 5: XOR Polynomial
+        function f(x1, x2) {
+            const w0 = parseFloat(document.getElementById('w0').value);
+            const w1 = parseFloat(document.getElementById('w1').value);
+            const w2 = parseFloat(document.getElementById('w2').value);
+            const w3 = parseFloat(document.getElementById('w3').value);
+            const w4 = parseFloat(document.getElementById('w4').value);
+            const w5 = parseFloat(document.getElementById('w5').value);
+            return w0 + w1*x1 + w2*x2 + w3*x1*x1 + w4*x2*x2 + w5*x1*x2;
+        }
+        
+        function resetWeights() {
+            document.getElementById('w0').value = 0;
+            document.getElementById('w1').value = 1;
+            document.getElementById('w2').value = 1;
+            document.getElementById('w3').value = 0;
+            document.getElementById('w4').value = 0;
+            document.getElementById('w5').value = -2;
+            testPoint();
+        }
+        
+        function testPoint() {
+            const x1 = parseFloat(document.getElementById('test_x1').value);
+            const x2 = parseFloat(document.getElementById('test_x2').value);
+            const result = f(x1, x2);
+            
+            // Test XOR truth table
+            const xorTests = [[0,0,0], [0,1,1], [1,0,1], [1,1,0]];
+            let xorCorrect = true;
+            let xorHtml = '<br><strong>XOR Truth Table Test:</strong><br>';
+            xorHtml += '<table style="border-collapse: collapse; width: 100%;">';
+            xorHtml += '<tr><th>x₁</th><th>x₂</th><th>Target</th><th>Output</th><th>Correct?</th></tr>';
+            
+            for (let [x1t, x2t, target] of xorTests) {
+                const out = f(x1t, x2t);
+                const correct = Math.abs(out - target) < 0.5;
+                xorCorrect = xorCorrect && correct;
+                xorHtml += `<tr><td>${x1t}</td><td>${x2t}</td><td>${target}</td><td>${out.toFixed(2)}</td><td>${correct ? '✓' : '✗'}</td></tr>`;
+            }
+            xorHtml += '</table>';
+            
+            document.getElementById('result5').innerHTML = `
+                <strong>Polynomial:</strong> f(x₁,x₂) = ${document.getElementById('w0').value} + ${document.getElementById('w1').value}·x₁ + ${document.getElementById('w2').value}·x₂ + ${document.getElementById('w3').value}·x₁² + ${document.getElementById('w4').value}·x₂² + ${document.getElementById('w5').value}·x₁·x₂<br><br>
+                <strong>Test point (${x1}, ${x2}):</strong> f = ${result.toFixed(4)}<br>
+                ${xorHtml}<br>
+                ${xorCorrect ? '<span class="success">✓ This polynomial solves XOR correctly!</span>' : '<span class="error">✗ This polynomial does NOT solve XOR</span>'}
+            `;
+        }
+        
+        // Update angle displays
+        document.getElementById('theta').addEventListener('input', function() {
+            document.getElementById('theta_val').innerText = this.value + '°';
+        });
+        document.getElementById('alpha').addEventListener('input', function() {
+            document.getElementById('alpha_val').innerText = this.value + '°';
+        });
+        
+        // Initialize
+        updateShape();
+    </script>
 </body>
 </html>
