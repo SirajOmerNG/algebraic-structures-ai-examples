@@ -486,3 +486,190 @@ print("""
    For the full paper code with datasets, see:
      https://github.com/SirajOmerNG/homological-algebra-framework
 """)
+
+# Add this at the beginning of each example
+
+def interactive_example_1():
+    """Interactive SO(2) Equivariance Demo"""
+    print("\n" + "="*70)
+    print("  INTERACTIVE EXAMPLE 1: SO(2) Equivariance")
+    print("="*70)
+    
+    # Get user input for rotation angle
+    theta_deg = float(input("\nEnter rotation angle for R(θ) in degrees (e.g., 45): "))
+    theta = np.radians(theta_deg)
+    R = np.array([[np.cos(theta), -np.sin(theta)],
+                  [np.sin(theta), np.cos(theta)]])
+    
+    # Get user input for layer angle
+    alpha_deg = float(input("Enter layer rotation angle in degrees (e.g., 30): "))
+    alpha = np.radians(alpha_deg)
+    W = np.array([[np.cos(alpha), -np.sin(alpha)],
+                  [np.sin(alpha), np.cos(alpha)]])
+    
+    # Get user input for vector
+    x1 = float(input("Enter x1 coordinate (e.g., 1): "))
+    x2 = float(input("Enter x2 coordinate (e.g., 0): "))
+    x = np.array([x1, x2])
+    
+    # Test equivariance
+    path_A = W @ (R @ x)
+    path_B = R @ (W @ x)
+    
+    print(f"\n  R({theta_deg}°) =\n{R}")
+    print(f"\n  W({alpha_deg}°) =\n{W}")
+    print(f"\n  Input vector x = {x}")
+    print(f"\n  PATH A (rotate then layer): {path_A}")
+    print(f"  PATH B (layer then rotate): {path_B}")
+    
+    error = np.linalg.norm(path_A - path_B)
+    print(f"\n  ‖Path A − Path B‖ = {error:.8f}")
+    
+    if error < 1e-10:
+        print("  ✓ EQUIVARIANCE CONFIRMED!")
+    else:
+        print("  ✗ NOT equivariant (layer must commute with rotation)")
+
+def interactive_example_2():
+    """Interactive Tensor Product Demo"""
+    print("\n" + "="*70)
+    print("  INTERACTIVE EXAMPLE 2: Tensor Products")
+    print("="*70)
+    
+    # Get query vector dimension
+    dim_V = int(input("\nEnter query vector dimension (e.g., 3): "))
+    dim_W = int(input("Enter key vector dimension (e.g., 2): "))
+    
+    print(f"\n  V = R^{dim_V}, W = R^{dim_W}")
+    print(f"  dim(V ⊗ W) = {dim_V} × {dim_W} = {dim_V * dim_W}")
+    
+    # Get query vector values
+    print(f"\nEnter {dim_V} values for query vector v (space-separated):")
+    v = np.array([float(x) for x in input().split()])
+    
+    # Get key vector values
+    print(f"Enter {dim_W} values for key vector w (space-separated):")
+    w = np.array([float(x) for x in input().split()])
+    
+    # Compute tensor product
+    outer = np.outer(v, w)
+    print(f"\n  v ⊗ w =\n{outer}")
+    
+    # Show basis decomposition
+    print("\n  Decomposition:")
+    for i in range(dim_V):
+        for j in range(dim_W):
+            if abs(outer[i,j]) > 1e-10:
+                print(f"    ({outer[i,j]:.2f})·e{i+1}⊗f{j+1}")
+
+def interactive_example_4():
+    """Interactive Betti Numbers Demo"""
+    print("\n" + "="*70)
+    print("  INTERACTIVE EXAMPLE 4: Betti Numbers")
+    print("="*70)
+    
+    print("\n  Build a simplicial complex:")
+    n_v = int(input("  Number of vertices (e.g., 3): "))
+    n_e = int(input("  Number of edges (e.g., 3): "))
+    
+    # Build custom boundary matrix
+    print(f"\n  Enter {n_e} edges as 'i j' (space-separated, 0-indexed):")
+    edges = []
+    for e in range(n_e):
+        i, j = map(int, input(f"  Edge {e+1}: ").split())
+        edges.append((i, j))
+    
+    # Build boundary matrix
+    boundary_1 = np.zeros((n_v, n_e))
+    for col, (i, j) in enumerate(edges):
+        boundary_1[i, col] = -1
+        boundary_1[j, col] = 1
+    
+    rank_1 = np.linalg.matrix_rank(boundary_1)
+    beta_0 = n_v - rank_1
+    beta_1 = (n_e - rank_1) - 0
+    
+    print(f"\n  ∂₁ matrix:\n{boundary_1.astype(int)}")
+    print(f"\n  rank(∂₁) = {rank_1}")
+    print(f"  β₀ = {n_v} - {rank_1} = {beta_0}")
+    print(f"  β₁ = {n_e} - {rank_1} = {beta_1}")
+
+def interactive_example_5():
+    """Interactive XOR Polynomial Demo"""
+    print("\n" + "="*70)
+    print("  INTERACTIVE EXAMPLE 5: XOR Polynomial")
+    print("="*70)
+    
+    print("\n  Polynomial: f(x₁,x₂) = w₀ + w₁·x₁ + w₂·x₂ + w₃·x₁² + w₄·x₂² + w₅·x₁·x₂")
+    
+    # Let user modify weights
+    print("\n  Current weights (canonical XOR solution):")
+    w = np.array([0.0, 1.0, 1.0, 0.0, 0.0, -2.0])
+    print(f"    w = {w}")
+    
+    modify = input("\n  Modify weights? (y/n): ").lower()
+    if modify == 'y':
+        w[0] = float(input("  Enter w₀ (bias): "))
+        w[1] = float(input("  Enter w₁ (x₁ coefficient): "))
+        w[2] = float(input("  Enter w₂ (x₂ coefficient): "))
+        w[3] = float(input("  Enter w₃ (x₁² coefficient): "))
+        w[4] = float(input("  Enter w₄ (x₂² coefficient): "))
+        w[5] = float(input("  Enter w₅ (x₁·x₂ coefficient): "))
+    
+    # Test custom input
+    print("\n  Test custom point:")
+    x1 = float(input("  Enter x₁: "))
+    x2 = float(input("  Enter x₂: "))
+    
+    def f(x1, x2):
+        return w[0] + w[1]*x1 + w[2]*x2 + w[3]*x1**2 + w[4]*x2**2 + w[5]*x1*x2
+    
+    result = f(x1, x2)
+    print(f"\n  f({x1}, {x2}) = {result:.4f}")
+    
+    # Test XOR truth table
+    print("\n  XOR Truth Table Test:")
+    print(f"  {'x1':>4} {'x2':>4} {'Target':>8} {'Output':>10} {'Correct?':>10}")
+    print("  " + "-"*45)
+    
+    for x1, x2, target in [(0,0,0), (0,1,1), (1,0,1), (1,1,0)]:
+        out = f(x1, x2)
+        correct = abs(out - target) < 0.5
+        print(f"  {x1:>4} {x2:>4} {target:>8} {out:>10.2f} {str(correct):>10}")
+
+# Main interactive menu
+def interactive_menu():
+    while True:
+        print("\n" + "="*60)
+        print("  INTERACTIVE ALGEBRAIC STRUCTURES DEMO")
+        print("="*60)
+        print("\n  Select an example to run interactively:")
+        print("    1. SO(2) Equivariance (G-Modules)")
+        print("    2. Tensor Products (Attention)")
+        print("    3. Functors (Neural Composition)")
+        print("    4. Betti Numbers (Homology)")
+        print("    5. XOR Polynomial (Varieties)")
+        print("    0. Exit")
+        
+        choice = input("\n  Enter choice: ")
+        
+        if choice == '1':
+            interactive_example_1()
+        elif choice == '2':
+            interactive_example_2()
+        elif choice == '3':
+            print("\n  Functor axioms always hold - no interactive input needed")
+            print("  F(id) = id ✓")
+            print("  F(g∘f) = F(g)∘F(f) ✓")
+        elif choice == '4':
+            interactive_example_4()
+        elif choice == '5':
+            interactive_example_5()
+        elif choice == '0':
+            print("\n  Goodbye!")
+            break
+        else:
+            print("\n  Invalid choice. Try again.")
+
+if __name__ == "__main__":
+    interactive_menu()
