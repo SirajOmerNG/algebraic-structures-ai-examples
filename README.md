@@ -8,7 +8,7 @@
 
 This repository contains **five fully-worked examples** demonstrating how abstract algebra underpins modern artificial intelligence.
 
-Based on the paper: *"Algebraic Foundations of Modern Artificial Intelligence"* (Siraj Osman Omer, 2026)
+Based on the paper: *"Algebraic Foundations of Modern Artificial Intelligence"* (Siraj Mohammed, 2026)
 
 ## Examples Included
 
